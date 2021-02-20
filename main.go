@@ -97,15 +97,21 @@ func listFromFile(path string) error{
 	}
 	defer  r.Close()
 	br := bufio.NewReader(r)
+
 	n:=1
+	isempty := true
 	for {
 		b, _, err := br.ReadLine()
 		if err != nil{
 			if err != io.EOF {
 				return err
 			}
+			if isempty{
+				fmt.Println("暂时没有日程")
+			}
 			break
 		}
+		isempty = false
 		line := string(b)
 		if strings.HasPrefix(line, "-") {
 			fmt.Printf("%s %03d: %s\n", doneMark2, n, strings.TrimSpace(line[1:]))
